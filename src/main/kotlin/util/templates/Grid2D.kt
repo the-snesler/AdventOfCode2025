@@ -162,6 +162,35 @@ class Grid2D<T>(val width: Int, val height: Int, val default: T) {
         return newGrid
     }
 
+    fun <U> map(transform: (T, Int, Int) -> U): Grid2D<U> {
+        val newGrid = Grid2D(width, height, transform(default, 0, 0))
+        for (y in 0 until height) {
+            for (x in 0 until width) {
+                newGrid[x, y] = transform(this[x, y], x, y)
+            }
+        }
+        return newGrid
+    }
+
+    fun forEach(function: (T, Int, Int) -> Unit) {
+        for (y in 0 until height) {
+            for (x in 0 until width) {
+                function(this[x, y], x, y)
+            }
+        }
+    }
+
+    fun count(function: (T, Int, Int) -> Boolean): Int {
+        var count = 0
+        for (y in 0 until height) {
+            for (x in 0 until width) {
+                if (function(this[x, y], x, y)) count++
+            }
+        }
+        return count
+    }
+
+
     companion object {
         fun <T> fromLines(lines: List<List<T>>, default: T): Grid2D<T> {
             val grid = Grid2D(lines[0].size, lines.size, default)
