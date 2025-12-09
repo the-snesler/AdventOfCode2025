@@ -200,6 +200,16 @@ class Grid2D<T>(val width: Int, val height: Int, val default: T) {
         return newGrid
     }
 
+    fun reduce(transform: (T, Grid2D<T>, Int, Int) -> T): Grid2D<T> {
+        val newGrid = this.copy()
+        for (y in 0 until height) {
+            for (x in 0 until width) {
+                newGrid[x, y] = transform(newGrid[x, y], newGrid, x, y)
+            }
+        }
+        return newGrid
+    }
+
 
     companion object {
         fun <T> fromLines(lines: List<List<T>>, default: T): Grid2D<T> {
