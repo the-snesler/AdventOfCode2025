@@ -190,6 +190,16 @@ class Grid2D<T>(val width: Int, val height: Int, val default: T) {
         return count
     }
 
+    fun transpose(): Grid2D<T> {
+        val newGrid = Grid2D(height, width, default)
+        for (y in 0 until height) {
+            for (x in 0 until width) {
+                newGrid[y, x] = this[x, y]
+            }
+        }
+        return newGrid
+    }
+
 
     companion object {
         fun <T> fromLines(lines: List<List<T>>, default: T): Grid2D<T> {
