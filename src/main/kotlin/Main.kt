@@ -65,7 +65,7 @@ fun runDay(day: Int, debug: Boolean = true) {
         val dayInstance = dayConstructor.newInstance(dayData, if (debug) RunContext.ONE else RunContext.PROD)
         println("Day $day")
         dayInstance.javaClass.getMethod("run").invoke(dayInstance)
-    } catch (e: ClassNotFoundException) {
+    } catch (_: ClassNotFoundException) {
         println("Day $day\n\tNot Implemented")
     }
 }
@@ -75,15 +75,16 @@ fun runDay(day: Int, debug: Boolean = true) {
  */
 fun runLatest() {
     // TODO: would love to know if there's a better way to do this
+    var latest = 1
     for (day in 2..26) {
         try {
             val dayString = day.toString().padStart(2, '0')
             Class.forName("adventOfCode$year.Day$dayString")
-        } catch (e: ClassNotFoundException) {
-            runDay(day - 1)
-            break
+            latest = day
+        } catch (_: ClassNotFoundException) {
         }
     }
+    runDay(latest)
 }
 
 fun loadAndSaveToday() {
